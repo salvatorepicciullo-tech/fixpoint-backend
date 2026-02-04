@@ -6,7 +6,7 @@ const bcrypt = require('bcrypt');
 const PDFDocument = require('pdfkit');
 
 const app = express();
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 8080;
 
 
 /* =======================
@@ -790,5 +790,5 @@ app.get('/api/quotes/:id/pdf', (req, res) => {
 
 
 app.listen(PORT, () => {
-  console.log(`Backend avviato sulla porta ${PORT}`);
+  console.log(`Backend avviato su porta ${PORT} ✅`);
 });
