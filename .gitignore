@@ -1,0 +1,7 @@
+node_modules/
+fixpoint.db
+fixpoint.db-shm
+fixpoint.db-wal
+.env
+npm
+rmdir
