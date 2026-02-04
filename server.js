@@ -29,8 +29,10 @@ const db = new sqlite3.Database(dbPath, err => {
     db.configure('busyTimeout', 5000);
     db.run('PRAGMA journal_mode = WAL');
     db.run('PRAGMA foreign_keys = ON');
-    console.log('Database collegato correttamente ✅');
+       console.log('Database collegato correttamente ✅');
     initDatabase();
+    seedDatabaseIfEmpty();
+
   }
 });
 
@@ -445,6 +447,36 @@ function initDatabase() {
   ];
   tables.forEach(sql => db.run(sql));
 }
+
+function seedDatabaseIfEmpty() {
+  db.get('SELECT COUNT(*) AS cnt FROM device_types', (err, row) => {
+    if (err) return;
+
+    if (row.cnt > 0) {
+      console.log('Seed già presente, salto 🚫');
+      return;
+    }
+
+    console.log('DB vuoto → inserisco seed iniziale 🌱');
+
+    db.serialize(() => {
+      db.run(`INSERT INTO device_types (name, active) VALUES ('Smartphone', 1)`);
+      db.run(`INSERT INTO brands (name, active) VALUES ('Apple', 1)`);
+      db.run(`INSERT INTO models (name, device_type_id, brand_id) VALUES ('iPhone 13', 1, 1)`);
+      db.run(`INSERT INTO repairs (name, active) VALUES ('Sostituzione display', 1)`);
+      db.run(`INSERT INTO repairs (name, active) VALUES ('Cambio batteria', 1)`);
+      db.run(`INSERT INTO model_repairs (model_id, repair_id, price) VALUES (1, 1, 129)`);
+      db.run(`INSERT INTO model_repairs (model_id, repair_id, price) VALUES (1, 2, 79)`);
+      db.run(`
+        INSERT INTO fixpoints (name, city, address, phone, email, active)
+        VALUES ('FixPoint Demo', 'Milano', 'Via Roma 1', '021234567', 'demo@fixpoint.it', 1)
+      `);
+
+      console.log('Seed completato ✅');
+    });
+  });
+}
+
 
 /* =======================
    QUOTES (PREVENTIVI)
