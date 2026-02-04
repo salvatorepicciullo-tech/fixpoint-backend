@@ -787,7 +787,7 @@ app.get('/api/quotes/:id/pdf', (req, res) => {
 /* =======================
    START
 ======================= */
-const PORT = process.env.PORT || 3001;
+
 
 app.listen(PORT, () => {
   console.log(`Backend avviato sulla porta ${PORT}`);
